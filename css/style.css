@@ -166,7 +166,7 @@ h6 { font-size: 22px; font-weight: 500; line-height: 1.3; }
 }
 
 .hero__content {
-  text-align: center;
+  text-align: left;
   max-width: 750px;
   margin: 0 auto;
   padding: 48px;
@@ -176,6 +176,10 @@ h6 { font-size: 22px; font-weight: 500; line-height: 1.3; }
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 20px;
   margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .hero__title {
@@ -219,7 +223,7 @@ h6 { font-size: 22px; font-weight: 500; line-height: 1.3; }
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .btn--outline-white {
