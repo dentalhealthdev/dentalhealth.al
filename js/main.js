@@ -24,18 +24,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  var header = document.getElementById('site-header');
-  if (header) {
-    var sticky = header.offsetTop;
-    window.addEventListener('scroll', function () {
-      if (window.scrollY > sticky) {
-        header.classList.add('header--sticky');
-      } else {
-        header.classList.remove('header--sticky');
-      }
-    });
-  }
-
   var bookingForm = document.getElementById('booking-form');
   if (bookingForm) {
     bookingForm.addEventListener('submit', function (e) {
