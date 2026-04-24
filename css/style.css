@@ -1576,3 +1576,91 @@ h6 { font-size: 22px; font-weight: 500; line-height: 1.3; }
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
+
+.team-carousel {
+  padding: 10px 0;
+  position: relative;
+}
+
+.team-carousel .swiper-slide {
+  height: auto;
+}
+
+.team-carousel .team-card {
+  padding: 12px;
+}
+
+.team-carousel .team-card img {
+  width: 100%;
+  max-width: 320px;
+  height: 390px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.team-carousel .team-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 4px;
+}
+
+.team-carousel .team-card p {
+  font-size: 14px;
+  color: var(--color-text-light);
+}
+
+.team-carousel .swiper-button-prev,
+.team-carousel .swiper-button-next {
+  color: var(--color-primary);
+  width: 44px;
+  height: 44px;
+  background: var(--color-white);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  top: 38%;
+}
+
+.team-carousel .swiper-button-prev::after,
+.team-carousel .swiper-button-next::after {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.team-carousel .swiper-button-prev:hover,
+.team-carousel .swiper-button-next:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.team-carousel .swiper-pagination {
+  margin-top: 24px;
+  position: relative;
+}
+
+.team-carousel .swiper-pagination-bullet {
+  background: var(--color-primary);
+  opacity: 0.3;
+  width: 10px;
+  height: 10px;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.team-carousel .swiper-pagination-bullet-active {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+@media (max-width: 768px) {
+  .team-carousel .swiper-button-prev,
+  .team-carousel .swiper-button-next {
+    display: none;
+  }
+
+  .team-carousel .team-card img {
+    max-width: 260px;
+    height: 320px;
+  }
+}

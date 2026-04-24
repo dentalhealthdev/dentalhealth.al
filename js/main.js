@@ -78,4 +78,38 @@ document.addEventListener('DOMContentLoaded', function () {
   yearEls.forEach(function (el) {
     el.textContent = new Date().getFullYear();
   });
+
+  var teamCarousel = document.querySelector('.team-carousel');
+  if (teamCarousel && typeof Swiper !== 'undefined') {
+    new Swiper('.team-carousel', {
+      slidesPerView: 1,
+      spaceBetween: 4,
+      loop: true,
+      autoplay: {
+        delay: 4000,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+        nextOffset: 12,
+        prevOffset: 12,
+      },
+      breakpoints: {
+        680: {
+          slidesPerView: 2,
+          spaceBetween: 4,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 6,
+        },
+      },
+    });
+  }
 });
