@@ -112,4 +112,37 @@ document.addEventListener('DOMContentLoaded', function () {
       },
     });
   }
+
+  var patientCarousel = document.querySelector('.patient-carousel');
+  if (patientCarousel && typeof Swiper !== 'undefined') {
+    new Swiper('.patient-carousel', {
+      slidesPerView: 1,
+      spaceBetween: 4,
+      loop: true,
+      autoplay: {
+        delay: 4000,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      },
+      speed: 1200,
+      pagination: {
+        el: '.patient-carousel .swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.patient-carousel .swiper-button-next',
+        prevEl: '.patient-carousel .swiper-button-prev',
+      },
+      breakpoints: {
+        680: {
+          slidesPerView: 2,
+          spaceBetween: 4,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 6,
+        },
+      },
+    });
+  }
 });

@@ -1664,3 +1664,127 @@ h6 { font-size: 22px; font-weight: 500; line-height: 1.3; }
     height: 320px;
   }
 }
+
+img-comparison-slider {
+  width: 100%;
+  border-radius: 8px;
+  --divider-width: 2px;
+  --divider-color: #ffffff;
+  --divider-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+img-comparison-slider [slot="handle"] {
+  width: 44px;
+  height: 44px;
+  cursor: ew-resize;
+}
+
+img-comparison-slider:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 2px #ffffff;
+}
+
+.smiles-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .smiles-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.smiles-grid__images {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.smiles-grid__content {
+  text-align: center;
+}
+
+.smiles-grid__content h2 {
+  font-size: 42px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 680px) {
+  .smiles-grid__content h2 {
+    font-size: 32px;
+  }
+}
+
+.smile-section-intro {
+  font-size: 18px;
+  max-width: 700px;
+  margin: 0 auto;
+  color: var(--color-text-light);
+  line-height: 1.7;
+}
+
+.patient-carousel {
+  padding: 10px 0;
+  position: relative;
+}
+
+.patient-carousel .swiper-slide {
+  height: auto;
+}
+
+.patient-carousel img-comparison-slider {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.patient-carousel .swiper-button-prev,
+.patient-carousel .swiper-button-next {
+  color: var(--color-primary);
+  width: 44px;
+  height: 44px;
+  background: var(--color-white);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  top: 38%;
+}
+
+.patient-carousel .swiper-button-prev::after,
+.patient-carousel .swiper-button-next::after {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.patient-carousel .swiper-button-prev:hover,
+.patient-carousel .swiper-button-next:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.patient-carousel .swiper-pagination {
+  margin-top: 24px;
+  position: relative;
+}
+
+.patient-carousel .swiper-pagination-bullet {
+  background: var(--color-primary);
+  opacity: 0.3;
+  width: 10px;
+  height: 10px;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.patient-carousel .swiper-pagination-bullet-active {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+@media (max-width: 768px) {
+  .patient-carousel .swiper-button-prev,
+  .patient-carousel .swiper-button-next {
+    display: none;
+  }
+}

@@ -40,6 +40,9 @@
         <loc>https://dentalhealthdev.github.io/dentalhealth.al/al/our-services/prosthetics/</loc>
     </url>
     <url>
+        <loc>https://dentalhealthdev.github.io/dentalhealth.al/al/patient-stories/</loc>
+    </url>
+    <url>
         <loc>https://dentalhealthdev.github.io/dentalhealth.al/contact-us/</loc>
     </url>
     <url>
@@ -79,6 +82,9 @@
         <loc>https://dentalhealthdev.github.io/dentalhealth.al/it/our-services/prosthetics/</loc>
     </url>
     <url>
+        <loc>https://dentalhealthdev.github.io/dentalhealth.al/it/patient-stories/</loc>
+    </url>
+    <url>
         <loc>https://dentalhealthdev.github.io/dentalhealth.al/our-services/</loc>
     </url>
     <url>
@@ -98,5 +104,8 @@
     </url>
     <url>
         <loc>https://dentalhealthdev.github.io/dentalhealth.al/our-services/prosthetics/</loc>
+    </url>
+    <url>
+        <loc>https://dentalhealthdev.github.io/dentalhealth.al/patient-stories/</loc>
     </url>
 </urlset>
