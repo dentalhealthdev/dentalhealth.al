@@ -147,4 +147,18 @@ document.addEventListener('DOMContentLoaded', function () {
       },
     });
   }
+
+  var reviewCards = document.querySelectorAll('.review-card');
+  reviewCards.forEach(function (card) {
+    var el = card.querySelector('.review-card__text');
+    var btn = card.querySelector('.review-card__more');
+    if (el && btn && el.scrollHeight > el.clientHeight) {
+      btn.style.display = '';
+      btn.addEventListener('click', function () {
+        var isExpanded = el.classList.toggle('expanded');
+        btn.textContent = isExpanded ? btn.dataset.less : btn.dataset.more;
+        btn.setAttribute('aria-label', btn.textContent);
+      });
+    }
+  });
 });
