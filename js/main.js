@@ -117,8 +117,10 @@ document.addEventListener('DOMContentLoaded', function () {
   if (patientCarousel && typeof Swiper !== 'undefined') {
     new Swiper('.patient-carousel', {
       slidesPerView: 1,
-      spaceBetween: 4,
+      spaceBetween: 16,
       loop: true,
+      noSwiping: true,
+      noSwipingClass: 'no-swiping',
       autoplay: {
         delay: 4000,
         disableOnInteraction: false,
@@ -136,11 +138,11 @@ document.addEventListener('DOMContentLoaded', function () {
       breakpoints: {
         680: {
           slidesPerView: 2,
-          spaceBetween: 4,
+          spaceBetween: 24,
         },
         1024: {
           slidesPerView: 3,
-          spaceBetween: 6,
+          spaceBetween: 32,
         },
       },
     });
