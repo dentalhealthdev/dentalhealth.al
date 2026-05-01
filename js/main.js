@@ -161,4 +161,25 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
   });
+
+  var langLinks = document.querySelectorAll('.lang-link');
+  langLinks.forEach(function (link) {
+    link.addEventListener('click', function () {
+      localStorage.setItem('dental_lang', this.dataset.lang);
+    });
+  });
+
+  var savedLang = localStorage.getItem('dental_lang');
+  if (savedLang) {
+    var path = window.location.pathname;
+    var currentLang = 'en';
+    if (path.startsWith('/al/') || path === '/al') currentLang = 'al';
+    else if (path.startsWith('/it/') || path === '/it') currentLang = 'it';
+
+    var isHomepage = path === '/' || path === '/al/' || path === '/it/' || path === '/al' || path === '/it' || path === '';
+    if (savedLang !== currentLang && isHomepage) {
+      var targetUrl = savedLang === 'en' ? '/' : '/' + savedLang + '/';
+      window.location.href = targetUrl;
+    }
+  }
 });
