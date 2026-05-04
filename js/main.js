@@ -5,72 +5,120 @@ document.addEventListener('DOMContentLoaded', function () {
   if (mobileToggle && mobileMenu) {
     mobileToggle.addEventListener('click', function () {
       mobileMenu.classList.toggle('mobile-menu--open');
-      mobileToggle.classList.toggle('hamburger--open');
+      mobileToggle.classList.toggle('header__hamburger--open');
     });
+  }
+
+  function throttle(fn, wait) {
+    var last = 0;
+    return function () {
+      var now = Date.now();
+      if (now - last >= wait) {
+        last = now;
+        fn.apply(this, arguments);
+      }
+    };
   }
 
   var backToTop = document.getElementById('back-to-top');
   if (backToTop) {
-    window.addEventListener('scroll', function () {
+    window.addEventListener('scroll', throttle(function () {
       if (window.scrollY > 400) {
         backToTop.classList.add('back-to-top--visible');
       } else {
         backToTop.classList.remove('back-to-top--visible');
       }
-    });
+    }, 100));
 
     backToTop.addEventListener('click', function () {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 
+  function showToast(message, type) {
+    var existing = document.querySelector('.toast-notification');
+    if (existing) existing.remove();
+
+    var toast = document.createElement('div');
+    toast.className = 'toast-notification toast-notification--' + (type || 'success');
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    requestAnimationFrame(function () {
+      toast.classList.add('toast-notification--visible');
+    });
+    setTimeout(function () {
+      toast.classList.remove('toast-notification--visible');
+      setTimeout(function () { toast.remove(); }, 300);
+    }, 4000);
+  }
+
+  function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
   var bookingForm = document.getElementById('booking-form');
   if (bookingForm) {
     bookingForm.addEventListener('submit', function (e) {
       e.preventDefault();
+      var nameField = document.getElementById('name');
+      var emailField = document.getElementById('email');
+      var phoneField = document.getElementById('phone');
+
+      if (!nameField.value.trim()) {
+        showToast('Please enter your name.', 'error');
+        nameField.focus();
+        return;
+      }
+      if (!validateEmail(emailField.value.trim())) {
+        showToast('Please enter a valid email address.', 'error');
+        emailField.focus();
+        return;
+      }
+      if (!phoneField.value.trim()) {
+        showToast('Please enter your phone number.', 'error');
+        phoneField.focus();
+        return;
+      }
+
+      var submitBtn = bookingForm.querySelector('button[type="submit"]');
+      var originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+
       var fileInput = document.getElementById('panoramic');
       var hasFile = fileInput && fileInput.files && fileInput.files.length > 0;
+      var formData = new FormData(bookingForm);
+      var options = {};
 
       if (hasFile) {
-        var formData = new FormData(bookingForm);
-        fetch('https://api.dentalhealth.al/book', {
-          method: 'POST',
-          body: formData,
-        })
-          .then(function (res) {
-            if (res.ok) {
-              bookingForm.reset();
-              alert('Thank you! We will contact you shortly.');
-            } else {
-              alert('Something went wrong. Please try calling us directly.');
-            }
-          })
-          .catch(function () {
-            alert('Something went wrong. Please try calling us directly.');
-          });
+        options.method = 'POST';
+        options.body = formData;
       } else {
-        var formData = new FormData(bookingForm);
         var data = {};
         formData.forEach(function (value, key) {
           if (key !== 'panoramic') data[key] = value;
         });
-        fetch('https://api.dentalhealth.al/book', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        })
-          .then(function (res) {
-            if (res.ok) {
-              bookingForm.reset();
-              alert('Thank you! We will contact you shortly.');
-            } else {
-              alert('Something went wrong. Please try calling us directly.');
-            }
-          })
-          .catch(function () {
-            alert('Something went wrong. Please try calling us directly.');
-          });
+        options.method = 'POST';
+        options.headers = { 'Content-Type': 'application/json' };
+        options.body = JSON.stringify(data);
       }
+
+      fetch('https://api.dentalhealth.al/book', options)
+        .then(function (res) {
+          if (res.ok) {
+            bookingForm.reset();
+            showToast('Thank you! We will contact you shortly.', 'success');
+          } else {
+            showToast('Something went wrong. Please try calling us directly.', 'error');
+          }
+        })
+        .catch(function () {
+          showToast('Something went wrong. Please try calling us directly.', 'error');
+        })
+        .finally(function () {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        });
     });
   }
 

@@ -1,0 +1,13 @@
+{
+  "name": "Dental Health Albania",
+  "short_name": "Dental Health",
+  "description": "Advanced dental treatments with care, precision, and years of experience. Specializing in implantology, prosthetics, and oral surgery in Tirana, Albania.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#013A65",
+  "icons": [
+    { "src": "/favicon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/android-chrome-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
