@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
         options.body = JSON.stringify(data);
       }
 
-      fetch('https://api.dentalhealth.al/book', options)
+      fetch(bookingForm.getAttribute('data-api-url'), options)
         .then(function (res) {
           if (res.ok) {
             bookingForm.reset();
