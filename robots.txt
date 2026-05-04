@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 Allow: /
-Sitemap: https://dentalhealthdev.github.io/dentalhealth.al/sitemap.xml
+Sitemap: https://dentalhealth.al/sitemap.xml
