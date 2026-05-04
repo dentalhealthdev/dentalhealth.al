@@ -56,6 +56,45 @@ document.addEventListener('DOMContentLoaded', function () {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
+  var uploadArea = document.getElementById('upload-area');
+  if (uploadArea) {
+    var fileInput = document.getElementById('panoramic');
+    var filenameEl = document.getElementById('upload-filename');
+
+    uploadArea.addEventListener('click', function () {
+      fileInput.click();
+    });
+
+    uploadArea.addEventListener('dragover', function (e) {
+      e.preventDefault();
+      uploadArea.classList.add('upload-area--active');
+    });
+
+    uploadArea.addEventListener('dragleave', function () {
+      uploadArea.classList.remove('upload-area--active');
+    });
+
+    uploadArea.addEventListener('drop', function (e) {
+      e.preventDefault();
+      uploadArea.classList.remove('upload-area--active');
+      if (e.dataTransfer.files.length) {
+        fileInput.files = e.dataTransfer.files;
+        uploadArea.classList.add('upload-area--has-file');
+        filenameEl.textContent = e.dataTransfer.files[0].name;
+      }
+    });
+
+    fileInput.addEventListener('change', function () {
+      if (fileInput.files.length) {
+        uploadArea.classList.add('upload-area--has-file');
+        filenameEl.textContent = fileInput.files[0].name;
+      } else {
+        uploadArea.classList.remove('upload-area--has-file');
+        filenameEl.textContent = '';
+      }
+    });
+  }
+
   var bookingForm = document.getElementById('booking-form');
   if (bookingForm) {
     bookingForm.addEventListener('submit', function (e) {

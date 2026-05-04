@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Dental Health Albania</title>
+      <link>https://dentalhealthdev.github.io/dentalhealth.al/</link>
+      <description>Advanced dental treatments with care, precision, and years of experience. Specializing in implantology, prosthetics, and oral surgery in Tirana, Albania.</description>
+      <generator>Zola</generator>
+      <language>en</language>
+      <atom:link href="https://dentalhealthdev.github.io/dentalhealth.al/rss.xml" rel="self" type="application/rss+xml"/>
+      
+    </channel>
+</rss>
