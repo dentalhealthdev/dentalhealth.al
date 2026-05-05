@@ -1,4 +1,34 @@
-@import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@300;400;500;600;700&display=swap');
+@font-face {
+  font-family: 'Gabarito';
+  src: url('../fonts/gabarito/Gabarito-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gabarito';
+  src: url('../fonts/gabarito/Gabarito-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gabarito';
+  src: url('../fonts/gabarito/Gabarito-600.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gabarito';
+  src: url('../fonts/gabarito/Gabarito-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 .skip-link {
   position: absolute;
@@ -2153,6 +2183,12 @@ h6 { font-size: 22px; font-weight: 500; line-height: 1.3; }
   }
 }
 
+@media (min-width: 1130px) {
+  .info-box__social {
+    grid-template-columns: repeat(3, 40px);
+  }
+}
+
 .info-box__social a {
   display: flex;
   align-items: center;
@@ -2179,7 +2215,7 @@ h6 { font-size: 22px; font-weight: 500; line-height: 1.3; }
 }
 
 .info-box__social--large {
-  grid-template-columns: repeat(4, 64px) !important;
+  grid-template-columns: repeat(5, 64px) !important;
   gap: 16px !important;
 }
 
