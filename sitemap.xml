@@ -47,6 +47,9 @@
         <loc>https://dentalhealth.al/al/contact-us/</loc>
     </url>
     <url>
+        <loc>https://dentalhealth.al/al/cookie-policy/</loc>
+    </url>
+    <url>
         <loc>https://dentalhealth.al/al/dental-tourism/</loc>
     </url>
     <url>
@@ -72,6 +75,9 @@
     </url>
     <url>
         <loc>https://dentalhealth.al/al/patient-stories/</loc>
+    </url>
+    <url>
+        <loc>https://dentalhealth.al/al/privacy-policy/</loc>
     </url>
     <url>
         <loc>https://dentalhealth.al/blog/</loc>
@@ -106,6 +112,9 @@
     </url>
     <url>
         <loc>https://dentalhealth.al/contact-us/</loc>
+    </url>
+    <url>
+        <loc>https://dentalhealth.al/cookie-policy/</loc>
     </url>
     <url>
         <loc>https://dentalhealth.al/dental-tourism/</loc>
@@ -151,6 +160,9 @@
         <loc>https://dentalhealth.al/it/contact-us/</loc>
     </url>
     <url>
+        <loc>https://dentalhealth.al/it/cookie-policy/</loc>
+    </url>
+    <url>
         <loc>https://dentalhealth.al/it/dental-tourism/</loc>
     </url>
     <url>
@@ -178,6 +190,9 @@
         <loc>https://dentalhealth.al/it/patient-stories/</loc>
     </url>
     <url>
+        <loc>https://dentalhealth.al/it/privacy-policy/</loc>
+    </url>
+    <url>
         <loc>https://dentalhealth.al/our-services/</loc>
     </url>
     <url>
@@ -200,5 +215,8 @@
     </url>
     <url>
         <loc>https://dentalhealth.al/patient-stories/</loc>
+    </url>
+    <url>
+        <loc>https://dentalhealth.al/privacy-policy/</loc>
     </url>
 </urlset>

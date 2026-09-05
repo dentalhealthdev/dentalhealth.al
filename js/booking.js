@@ -20,6 +20,18 @@
     return null;
   }
 
+  function getAdConsent() {
+    try {
+      var raw = localStorage.getItem('cc_cookie');
+      if (!raw) return false;
+      var data = JSON.parse(raw);
+      return data.categories.indexOf('ads') !== -1 && Date.now() < data.expirationTime;
+    } catch (error) {
+      reportTrackingError('reading ad consent preference', error);
+      return false;
+    }
+  }
+
   var CHECK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>';
   var ERROR_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
   var MODAL_TEXTS = {
@@ -114,7 +126,7 @@
       window.gtag('event', 'conversion', {
         send_to: 'AW-18428427408/sIm3CIOZ5e0cEJD5rdNE',
         value: 1.0,
-        currency: 'USD',
+        currency: 'EUR',
         transaction_id: 'booking-' + bookingId
       });
     } catch (error) {
@@ -284,6 +296,7 @@
         formData.append('googleClickIdType', googleClick.type);
         formData.append('googleClickCapturedAt', String(googleClick.capturedAt));
       }
+      formData.append('consent', getAdConsent() ? 'true' : 'false');
 
       function completeBooking(payload) {
         var bookingId = payload && payload.id;

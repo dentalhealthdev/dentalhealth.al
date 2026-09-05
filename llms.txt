@@ -13,6 +13,8 @@ Important notes:
 
 ## Core Pages
 
+- [Privacy Policy](https://dentalhealth.al/privacy-policy/): How Dental Health processes your personal data when you request an appointment, and how we use data for advertising measurement.
+- [Cookie Policy](https://dentalhealth.al/cookie-policy/): How we use strictly necessary, analytics and advertising cookies on dentalhealth.al and how you can manage your consent.
 - [Home](https://dentalhealth.al/): Advanced dental treatments with care, precision, and years of experience. Specializing in implantology, prosthetics, and oral surgery in Tirana, Albania.
 - [About Us](https://dentalhealth.al/about/): Learn about Dental Health Albania, led by Dr. Shukri Jahiu, oral surgeon. Certified team, modern clinic in Tirana. Specializing in dental implants, All-on-4, and full mouth rehabilitation at affordable prices.
 - [Our Services](https://dentalhealth.al/our-services/): Comprehensive dental care for the whole family. From routine checkups to advanced surgeries at Dental Health Tirana.
