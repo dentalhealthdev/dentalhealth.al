@@ -117,6 +117,11 @@
     al: 'Ju lutem shkruani një numër telefoni të vlefshëm.',
     it: 'Inserisci un numero di telefono valido.'
   };
+  var PHONE_ERR_DIGITS = {
+    en: 'Phone number can only contain numbers.',
+    al: 'Numri i telefonit mund të përmbajë vetëm numra.',
+    it: 'Il numero di telefono può contenere solo cifre.'
+  };
   var COUNTRY_BY_LANG = { en: 'gb', al: 'al', it: 'it' };
 
   function getInitialCountry(lang) {
@@ -308,12 +313,36 @@
           phoneInput.value = digits.substring(dialCode.length);
         }
       }
-      phoneInput.addEventListener('input', function (e) {
-        if (e && e.inputType === 'insertFromPaste') {
-          setTimeout(normalizePhone, 0);
+      phoneInput.addEventListener('paste', function (e) {
+        var text = (e.clipboardData || window.clipboardData).getData('text');
+        if (!text || text.indexOf('+') !== 0) return;
+        var digits = text.replace(/\D/g, '');
+        if (digits.length < 8) return;
+        e.preventDefault();
+        try { phoneIti.setNumber(text); } catch (err) {}
+        var sel = phoneIti.getSelectedCountryData();
+        var dialCode = String(sel && sel.dialCode || '');
+        var national = phoneInput.value.replace(/\D/g, '');
+        if (dialCode && national.indexOf(dialCode) === 0) {
+          national = national.substring(dialCode.length);
         }
+        phoneInput.value = national;
       });
       phoneInput.addEventListener('change', normalizePhone);
+
+      function syncPhoneValidity() {
+        var lang = getLang();
+        if (phoneInput.validity.valueMissing) {
+          phoneInput.setCustomValidity(PHONE_ERR[lang]);
+        } else if (phoneInput.validity.patternMismatch) {
+          phoneInput.setCustomValidity(PHONE_ERR_DIGITS[lang]);
+        } else {
+          phoneInput.setCustomValidity('');
+        }
+      }
+      phoneInput.addEventListener('input', syncPhoneValidity);
+      phoneInput.addEventListener('change', syncPhoneValidity);
+      syncPhoneValidity();
     }
 
     bookingForm.addEventListener('submit', function (e) {
