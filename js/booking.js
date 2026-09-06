@@ -112,6 +112,39 @@
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
+  var PHONE_ERR = {
+    en: 'Please enter a valid phone number.',
+    al: 'Ju lutem shkruani një numër telefoni të vlefshëm.',
+    it: 'Inserisci un numero di telefono valido.'
+  };
+  var PHONE_ERR_DIGITS = {
+    en: 'Phone number can only contain numbers.',
+    al: 'Numri i telefonit mund të përmbajë vetëm numra.',
+    it: 'Il numero di telefono può contenere solo cifre.'
+  };
+  var COUNTRY_BY_LANG = { en: 'gb', al: 'al', it: 'it' };
+
+  function getInitialCountry(lang) {
+    return COUNTRY_BY_LANG[lang] || 'gb';
+  }
+
+  function getPhoneProblem(input) {
+    if (!input) return 'empty';
+    var cleaned = (input.value || '').replace(/[\s().-]/g, '');
+    if (!cleaned) return 'empty';
+    if (/[^0-9]/.test(cleaned)) return 'digits';
+    return null;
+  }
+
+  function buildFullPhone(input, iti) {
+    var dialCode = iti ? iti.getSelectedCountryData().dialCode : '';
+    if (!dialCode) return null;
+    var national = input.value.replace(/\D/g, '');
+    if (national.charAt(0) === '0') national = national.substring(1);
+    if (!national) return null;
+    return '+' + dialCode + national;
+  }
+
   function gtagReportConversion(bookingId) {
     if (!Number.isSafeInteger(bookingId) || bookingId <= 0) {
       reportTrackingError('reporting Google Ads conversion', new Error('Booking ID is invalid'));
@@ -257,6 +290,16 @@
     var bookingForm = document.querySelector('#booking-form form');
     if (!bookingForm) return;
 
+    var phoneInput = document.getElementById('phone');
+    var phoneIti = null;
+    if (phoneInput && typeof window.intlTelInput === 'function') {
+      phoneIti = window.intlTelInput(phoneInput, {
+        separateDialCode: true,
+        initialCountry: getInitialCountry(getLang()),
+        preferredCountries: ['al', 'it', 'ch', 'de', 'gb', 'fr', 'es']
+      });
+    }
+
     bookingForm.addEventListener('submit', function (e) {
       e.preventDefault();
       var nameField = document.getElementById('name');
@@ -273,11 +316,19 @@
         emailField.focus();
         return;
       }
-      if (!phoneField.value.trim()) {
-        showToast('Please enter your phone number.', 'error');
+      var problem = getPhoneProblem(phoneField);
+      if (problem) {
+        showToast(problem === 'digits' ? PHONE_ERR_DIGITS[getLang()] : PHONE_ERR[getLang()], 'error');
         phoneField.focus();
         return;
       }
+      var fullPhone = buildFullPhone(phoneField, phoneIti);
+      if (!fullPhone) {
+        showToast(PHONE_ERR[getLang()], 'error');
+        phoneField.focus();
+        return;
+      }
+      phoneField.value = fullPhone;
 
       var submitBtn = e.submitter || bookingForm.querySelector('button.btn--primary');
       if (!submitBtn) return;
@@ -310,6 +361,7 @@
           if (img.src && img.src.startsWith('blob:')) URL.revokeObjectURL(img.src);
         });
         bookingForm.reset();
+        if (phoneIti) phoneIti.setNumber('');
         selectedFiles = [];
         renderFileList();
         if (typeof window.fbq === 'function') {
