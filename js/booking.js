@@ -293,17 +293,19 @@
     }
 
     if (phoneInput) {
-      phoneInput.addEventListener('invalid', function () {
+      function syncPhoneValidity() {
         var lang = getLang();
         if (phoneInput.validity.valueMissing) {
           phoneInput.setCustomValidity(PHONE_ERR[lang]);
-        } else {
+        } else if (phoneInput.validity.patternMismatch) {
           phoneInput.setCustomValidity(PHONE_ERR_DIGITS[lang]);
+        } else {
+          phoneInput.setCustomValidity('');
         }
-      });
-      phoneInput.addEventListener('input', function () {
-        phoneInput.setCustomValidity('');
-      });
+      }
+      phoneInput.addEventListener('input', syncPhoneValidity);
+      phoneInput.addEventListener('change', syncPhoneValidity);
+      syncPhoneValidity();
     }
 
     bookingForm.addEventListener('submit', function (e) {
