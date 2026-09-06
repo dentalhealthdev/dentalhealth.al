@@ -117,11 +117,6 @@
     al: 'Ju lutem shkruani një numër telefoni të vlefshëm.',
     it: 'Inserisci un numero di telefono valido.'
   };
-  var PHONE_ERR_DIGITS = {
-    en: 'Phone number can only contain numbers.',
-    al: 'Numri i telefonit mund të përmbajë vetëm numra.',
-    it: 'Il numero di telefono può contenere solo cifre.'
-  };
   var COUNTRY_BY_LANG = { en: 'gb', al: 'al', it: 'it' };
 
   function getInitialCountry(lang) {
@@ -133,8 +128,22 @@
     if (!dialCode) return null;
     var national = input.value.replace(/\D/g, '');
     if (national.charAt(0) === '0') national = national.substring(1);
+    if (dialCode && national.indexOf(dialCode) === 0) national = national.substring(dialCode.length);
     if (!national) return null;
     return '+' + dialCode + national;
+  }
+
+  function getContactFailText() {
+    var links =
+      '<a href="tel:+355686658888">+355 68 665 8888</a> · ' +
+      '<a href="mailto:dentalhealth.dev@gmail.com">dentalhealth.dev@gmail.com</a> · ' +
+      '<a href="https://wa.me/355686658888" target="_blank" rel="noopener">WhatsApp</a>';
+    var prefix = {
+      en: 'Something went wrong. Please contact us directly:',
+      al: 'Diçka shkoi keq. Ju lutemi na kontaktoni direkt:',
+      it: 'Qualcosa è andato storto. Contattaci direttamente:'
+    }[getLang()] || 'Something went wrong. Please contact us directly:';
+    return prefix + '<br>' + links;
   }
 
   function gtagReportConversion(bookingId) {
@@ -288,24 +297,23 @@
       phoneIti = window.intlTelInput(phoneInput, {
         separateDialCode: true,
         initialCountry: getInitialCountry(getLang()),
-        preferredCountries: ['al', 'it', 'ch', 'de', 'gb', 'fr', 'es']
+        preferredCountries: ['al', 'it', 'ch', 'de', 'gb', 'us', 'fr', 'es']
       });
-    }
 
-    if (phoneInput) {
-      function syncPhoneValidity() {
-        var lang = getLang();
-        if (phoneInput.validity.valueMissing) {
-          phoneInput.setCustomValidity(PHONE_ERR[lang]);
-        } else if (phoneInput.validity.patternMismatch) {
-          phoneInput.setCustomValidity(PHONE_ERR_DIGITS[lang]);
-        } else {
-          phoneInput.setCustomValidity('');
+      function normalizePhone() {
+        if (phoneInput.value.indexOf('+') !== 0) return;
+        var dialCode = phoneIti.getSelectedCountryData().dialCode || '';
+        var digits = phoneInput.value.replace(/\D/g, '');
+        if (dialCode && digits.indexOf(dialCode) === 0) {
+          phoneInput.value = digits.substring(dialCode.length);
         }
       }
-      phoneInput.addEventListener('input', syncPhoneValidity);
-      phoneInput.addEventListener('change', syncPhoneValidity);
-      syncPhoneValidity();
+      phoneInput.addEventListener('input', function (e) {
+        if (e && e.inputType === 'insertFromPaste') {
+          setTimeout(normalizePhone, 0);
+        }
+      });
+      phoneInput.addEventListener('change', normalizePhone);
     }
 
     bookingForm.addEventListener('submit', function (e) {
@@ -326,10 +334,12 @@
       }
       var fullPhone = buildFullPhone(phoneField, phoneIti);
       if (!fullPhone) {
+        phoneField.setCustomValidity(PHONE_ERR[getLang()]);
+        phoneField.reportValidity();
         phoneField.focus();
         return;
       }
-      phoneField.value = fullPhone;
+      phoneField.setCustomValidity('');
 
       var submitBtn = e.submitter || bookingForm.querySelector('button.btn--primary');
       if (!submitBtn) return;
@@ -339,6 +349,7 @@
       submitBtn.textContent = 'Sending...';
 
       var formData = new FormData(bookingForm);
+      formData.set('phone', fullPhone);
       for (var i = 0; i < selectedFiles.length; i++) {
         formData.append('files', selectedFiles[i]);
       }
@@ -402,7 +413,7 @@
         .then(function (res) {
           if (!res.ok) {
             reportTrackingError('submitting booking', new Error('API returned HTTP ' + res.status));
-            showToast('Something went wrong. Please try calling us directly.', 'error');
+            showToast(getContactFailText(), 'error');
             return;
           }
           return res.json().then(function (payload) {
@@ -414,7 +425,7 @@
         })
         .catch(function (error) {
           reportTrackingError('submitting booking', error);
-          showToast('Something went wrong. Please try calling us directly.', 'error');
+          showToast(getContactFailText(), 'error');
         })
         .finally(function () {
           submitBtn.disabled = false;
