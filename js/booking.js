@@ -128,14 +128,6 @@
     return COUNTRY_BY_LANG[lang] || 'gb';
   }
 
-  function getPhoneProblem(input) {
-    if (!input) return 'empty';
-    var cleaned = (input.value || '').replace(/[\s().-]/g, '');
-    if (!cleaned) return 'empty';
-    if (/[^0-9]/.test(cleaned)) return 'digits';
-    return null;
-  }
-
   function buildFullPhone(input, iti) {
     var dialCode = iti ? iti.getSelectedCountryData().dialCode : '';
     if (!dialCode) return null;
@@ -300,6 +292,20 @@
       });
     }
 
+    if (phoneInput) {
+      phoneInput.addEventListener('invalid', function () {
+        var lang = getLang();
+        if (phoneInput.validity.valueMissing) {
+          phoneInput.setCustomValidity(PHONE_ERR[lang]);
+        } else {
+          phoneInput.setCustomValidity(PHONE_ERR_DIGITS[lang]);
+        }
+      });
+      phoneInput.addEventListener('input', function () {
+        phoneInput.setCustomValidity('');
+      });
+    }
+
     bookingForm.addEventListener('submit', function (e) {
       e.preventDefault();
       var nameField = document.getElementById('name');
@@ -316,15 +322,8 @@
         emailField.focus();
         return;
       }
-      var problem = getPhoneProblem(phoneField);
-      if (problem) {
-        showToast(problem === 'digits' ? PHONE_ERR_DIGITS[getLang()] : PHONE_ERR[getLang()], 'error');
-        phoneField.focus();
-        return;
-      }
       var fullPhone = buildFullPhone(phoneField, phoneIti);
       if (!fullPhone) {
-        showToast(PHONE_ERR[getLang()], 'error');
         phoneField.focus();
         return;
       }
