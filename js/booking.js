@@ -117,11 +117,6 @@
     al: 'Ju lutem shkruani një numër telefoni të vlefshëm.',
     it: 'Inserisci un numero di telefono valido.'
   };
-  var PHONE_ERR_DIGITS = {
-    en: 'Phone number can only contain numbers.',
-    al: 'Numri i telefonit mund të përmbajë vetëm numra.',
-    it: 'Il numero di telefono può contenere solo cifre.'
-  };
   var COUNTRY_BY_LANG = { en: 'gb', al: 'al', it: 'it' };
 
   function getInitialCountry(lang) {
@@ -129,13 +124,10 @@
   }
 
   function buildFullPhone(input, iti) {
-    var dialCode = iti ? iti.getSelectedCountryData().dialCode : '';
-    if (!dialCode) return null;
-    var national = input.value.replace(/\D/g, '');
-    if (national.charAt(0) === '0') national = national.substring(1);
-    if (dialCode && national.indexOf(dialCode) === 0) national = national.substring(dialCode.length);
-    if (!national) return null;
-    return '+' + dialCode + national;
+    if (!iti || !/^\+?[0-9().\- ]+$/.test(input.value.trim())) return null;
+    if (iti.isValidNumber() !== true) return null;
+    var number = iti.getNumber();
+    return /^\+[1-9][0-9]{1,14}$/.test(number) ? number : null;
   }
 
   function getContactFailText() {
@@ -302,32 +294,17 @@
       phoneIti = window.intlTelInput(phoneInput, {
         separateDialCode: true,
         initialCountry: getInitialCountry(getLang()),
+        formatAsYouType: false,
+        validationNumberType: null,
         preferredCountries: ['al', 'it', 'ch', 'de', 'gb', 'us', 'fr', 'es']
       });
 
       function normalizePhone() {
-        if (phoneInput.value.indexOf('+') !== 0) return;
-        var dialCode = phoneIti.getSelectedCountryData().dialCode || '';
-        var digits = phoneInput.value.replace(/\D/g, '');
-        if (dialCode && digits.indexOf(dialCode) === 0) {
-          phoneInput.value = digits.substring(dialCode.length);
+        var value = phoneInput.value.trim();
+        if (/^\+[0-9().\- ]+$/.test(value)) {
+          phoneIti.setNumber(value);
         }
       }
-      phoneInput.addEventListener('paste', function (e) {
-        var text = (e.clipboardData || window.clipboardData).getData('text');
-        if (!text || text.indexOf('+') !== 0) return;
-        var digits = text.replace(/\D/g, '');
-        if (digits.length < 8) return;
-        e.preventDefault();
-        try { phoneIti.setNumber(text); } catch (err) {}
-        var sel = phoneIti.getSelectedCountryData();
-        var dialCode = String(sel && sel.dialCode || '');
-        var national = phoneInput.value.replace(/\D/g, '');
-        if (dialCode && national.indexOf(dialCode) === 0) {
-          national = national.substring(dialCode.length);
-        }
-        phoneInput.value = national;
-      });
       phoneInput.addEventListener('change', normalizePhone);
 
       function syncPhoneValidity() {
@@ -335,13 +312,14 @@
         if (phoneInput.validity.valueMissing) {
           phoneInput.setCustomValidity(PHONE_ERR[lang]);
         } else if (phoneInput.validity.patternMismatch) {
-          phoneInput.setCustomValidity(PHONE_ERR_DIGITS[lang]);
+          phoneInput.setCustomValidity(PHONE_ERR[lang]);
         } else {
           phoneInput.setCustomValidity('');
         }
       }
       phoneInput.addEventListener('input', syncPhoneValidity);
       phoneInput.addEventListener('change', syncPhoneValidity);
+      phoneInput.addEventListener('countrychange', syncPhoneValidity);
       syncPhoneValidity();
     }
 
