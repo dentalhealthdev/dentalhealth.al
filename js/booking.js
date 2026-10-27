@@ -36,14 +36,32 @@
   var ERROR_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
   var MODAL_TEXTS = {
     en: {
+      error_title: 'Something went wrong',
+      confirm: 'OK',
+      name_error: 'Please enter your name.',
+      email_error: 'Please enter a valid email address.',
+      sending: 'Sending...',
+      remove_file: 'Remove',
       success_title: 'Thank You!',
       success_body: 'Your appointment request has been received. We\'ll get back to you as soon as possible to ensure a smooth and comfortable experience. We look forward to welcoming you!'
     },
     al: {
+      error_title: 'Diçka shkoi keq',
+      confirm: 'Në rregull',
+      name_error: 'Ju lutemi shkruani emrin tuaj.',
+      email_error: 'Ju lutemi shkruani një adresë emaili të vlefshme.',
+      sending: 'Duke dërguar...',
+      remove_file: 'Hiq',
       success_title: 'Faleminderit!',
-      success_body: 'Kërkesa juaj për takim është pranuar. Do t\'ju kontaktojmë sa më shpejtë për t\'ju siguruar një përvojë të shijshme e të rehatshme. Presim t\'ju mirëpresim!'
+      success_body: 'Kërkesa juaj për takim është pranuar. Do t\'ju kontaktojmë sa më shpejt për t\'ju siguruar një përvojë të këndshme e të rehatshme. Presim t\'ju mirëpresim!'
     },
     it: {
+      error_title: 'Qualcosa è andato storto',
+      confirm: 'Va bene',
+      name_error: 'Inserisci il tuo nome.',
+      email_error: 'Inserisci un indirizzo email valido.',
+      sending: 'Invio in corso...',
+      remove_file: 'Rimuovi',
       success_title: 'Grazie!',
       success_body: 'La tua richiesta di appuntamento è stata ricevuta. Ti ricontatteremo il prima possibile per garantirti un\'esperienza confortevole. Non vediamo l\'ora di accoglierti!'
     }
@@ -69,7 +87,7 @@
     var lang = getLang();
     var texts = MODAL_TEXTS[lang] || MODAL_TEXTS.en;
     var isError = type === 'error';
-    var title = isError ? 'Oops!' : texts.success_title;
+    var title = isError ? texts.error_title : texts.success_title;
     var body = isError ? message : texts.success_body;
     var icon = isError ? ERROR_SVG : CHECK_SVG;
 
@@ -85,7 +103,7 @@
         '<div class="modal-card__icon">' + icon + '</div>' +
         '<h3 class="modal-card__title">' + title + '</h3>' +
         '<p class="modal-card__body">' + body + '</p>' +
-        '<button class="modal-card__btn">OK</button>' +
+        '<button class="modal-card__btn">' + texts.confirm + '</button>' +
       '</div>';
 
     overlay.appendChild(card);
@@ -227,7 +245,7 @@
           removeBtn.type = 'button';
           removeBtn.className = 'upload-area__remove';
           removeBtn.innerHTML = TRASH_SVG;
-          removeBtn.setAttribute('aria-label', 'Remove ' + file.name);
+          removeBtn.setAttribute('aria-label', (MODAL_TEXTS[getLang()] || MODAL_TEXTS.en).remove_file + ' ' + file.name);
           removeBtn.addEventListener('click', function (e) {
             e.stopPropagation();
             if (isImageFile(file)) {
@@ -330,12 +348,12 @@
       var phoneField = document.getElementById('phone');
 
       if (!nameField.value.trim()) {
-        showToast('Please enter your name.', 'error');
+        showToast((MODAL_TEXTS[getLang()] || MODAL_TEXTS.en).name_error, 'error');
         nameField.focus();
         return;
       }
       if (!validateEmail(emailField.value.trim())) {
-        showToast('Please enter a valid email address.', 'error');
+        showToast((MODAL_TEXTS[getLang()] || MODAL_TEXTS.en).email_error, 'error');
         emailField.focus();
         return;
       }
@@ -353,7 +371,7 @@
       var originalText = submitBtn.textContent;
       submitBtn.disabled = true;
       submitBtn.classList.add('btn--sending');
-      submitBtn.textContent = 'Sending...';
+      submitBtn.textContent = (MODAL_TEXTS[getLang()] || MODAL_TEXTS.en).sending;
 
       var formData = new FormData(bookingForm);
       formData.set('phone', fullPhone);
@@ -410,7 +428,7 @@
         } catch (error) {
           reportTrackingError('clearing Google click ID', error);
         }
-        showToast('Thank you! We will contact you shortly.', 'success');
+        showToast('', 'success');
       }
 
       fetch(bookingForm.getAttribute('data-api-url'), {
