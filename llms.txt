@@ -48,3 +48,5 @@ Important notes:
 
 - [Albanian version](https://dentalhealth.al/al/): Versioni shqip i faqes
 - [Italian version](https://dentalhealth.al/it/): Versione italiana del sito
+- [Hebrew version](https://dentalhealth.al/he/): האתר בעברית
+- [German version](https://dentalhealth.al/de/): Deutsche Version der Website

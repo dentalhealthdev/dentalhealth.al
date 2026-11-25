@@ -43,7 +43,7 @@
       sending: 'Sending...',
       remove_file: 'Remove',
       success_title: 'Thank You!',
-      success_body: 'Your appointment request has been received. We\'ll get back to you as soon as possible to ensure a smooth and comfortable experience. We look forward to welcoming you!'
+      success_body: 'We\'ve received your appointment request. We\'ll reply in English shortly to arrange your visit.'
     },
     al: {
       error_title: 'Diçka shkoi keq',
@@ -53,7 +53,7 @@
       sending: 'Duke dërguar...',
       remove_file: 'Hiq',
       success_title: 'Faleminderit!',
-      success_body: 'Kërkesa juaj për takim është pranuar. Do t\'ju kontaktojmë sa më shpejt për t\'ju siguruar një përvojë të këndshme e të rehatshme. Presim t\'ju mirëpresim!'
+      success_body: 'Kemi marrë kërkesën tuaj për takim. Do t\'ju përgjigjemi së shpejti në anglisht për të caktuar vizitën tuaj.'
     },
     it: {
       error_title: 'Qualcosa è andato storto',
@@ -63,7 +63,27 @@
       sending: 'Invio in corso...',
       remove_file: 'Rimuovi',
       success_title: 'Grazie!',
-      success_body: 'La tua richiesta di appuntamento è stata ricevuta. Ti ricontatteremo il prima possibile per garantirti un\'esperienza confortevole. Non vediamo l\'ora di accoglierti!'
+      success_body: 'Abbiamo ricevuto la tua richiesta di appuntamento. Ti risponderemo al più presto in italiano per concordare la visita.'
+    },
+    de: {
+      error_title: 'Ein Fehler ist aufgetreten',
+      confirm: 'OK',
+      name_error: 'Bitte geben Sie Ihren Namen ein.',
+      email_error: 'Bitte geben Sie eine gültige E-Mail-Adresse ein.',
+      sending: 'Wird gesendet …',
+      remove_file: 'Entfernen',
+      success_title: 'Vielen Dank!',
+      success_body: 'Ihre Terminanfrage ist eingegangen. Wir melden uns in Kürze auf Englisch bei Ihnen, um Ihren Besuch zu vereinbaren.'
+    },
+    he: {
+      error_title: 'אירעה שגיאה',
+      confirm: 'אישור',
+      name_error: 'יש להזין שם.',
+      email_error: 'יש להזין כתובת דוא״ל תקינה.',
+      sending: 'שולח…',
+      remove_file: 'הסרת',
+      success_title: 'תודה!',
+      success_body: 'בקשת התור התקבלה. נחזור אליכם באנגלית בהקדם כדי לתאם את הביקור במרפאה.'
     }
   };
 
@@ -133,9 +153,42 @@
   var PHONE_ERR = {
     en: 'Please enter a valid phone number.',
     al: 'Ju lutem shkruani një numër telefoni të vlefshëm.',
-    it: 'Inserisci un numero di telefono valido.'
+    it: 'Inserisci un numero di telefono valido.',
+    he: 'יש להזין מספר טלפון תקין.',
+    de: 'Bitte geben Sie eine gültige Telefonnummer ein.'
   };
-  var COUNTRY_BY_LANG = { en: 'gb', al: 'al', it: 'it' };
+  var COUNTRY_BY_LANG = { en: 'gb', al: 'al', it: 'it', he: 'il', de: 'de' };
+  var PHONE_COUNTRY_TEXTS = {
+    de: {
+      selectedCountryAriaLabel: 'Ausgewähltes Land',
+      noCountrySelected: 'Kein Land ausgewählt',
+      countryListAriaLabel: 'Länderliste',
+      searchPlaceholder: 'Land suchen',
+      zeroSearchResults: 'Keine Suchergebnisse',
+      oneSearchResult: 'Ein Suchergebnis',
+      multipleSearchResults: '${count} Suchergebnisse'
+    },
+    he: {
+      selectedCountryAriaLabel: 'המדינה שנבחרה',
+      noCountrySelected: 'לא נבחרה מדינה',
+      countryListAriaLabel: 'רשימת מדינות',
+      searchPlaceholder: 'חיפוש מדינה',
+      zeroSearchResults: 'לא נמצאו תוצאות',
+      oneSearchResult: 'נמצאה תוצאה אחת',
+      multipleSearchResults: 'נמצאו ${count} תוצאות'
+    }
+  };
+
+  function getPhoneCountryTexts(lang) {
+    var labels = Object.assign({}, PHONE_COUNTRY_TEXTS[lang]);
+    if (PHONE_COUNTRY_TEXTS[lang] && typeof Intl.DisplayNames === 'function') {
+      var countryNames = new Intl.DisplayNames([lang], { type: 'region' });
+      window.intlTelInput.getCountryData().forEach(function (country) {
+        labels[country.iso2] = countryNames.of(country.iso2.toUpperCase());
+      });
+    }
+    return labels;
+  }
 
   function getInitialCountry(lang) {
     return COUNTRY_BY_LANG[lang] || 'gb';
@@ -156,7 +209,9 @@
     var prefix = {
       en: 'Something went wrong. Please contact us directly:',
       al: 'Diçka shkoi keq. Ju lutemi na kontaktoni direkt:',
-      it: 'Qualcosa è andato storto. Contattaci direttamente:'
+      it: 'Qualcosa è andato storto. Contattaci direttamente:',
+      he: 'אירעה שגיאה. ניתן ליצור איתנו קשר ישירות:',
+      de: 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie uns direkt:'
     }[getLang()] || 'Something went wrong. Please contact us directly:';
     return prefix + '<br>' + links;
   }
@@ -309,9 +364,11 @@
     var phoneInput = document.getElementById('phone');
     var phoneIti = null;
     if (phoneInput && typeof window.intlTelInput === 'function') {
+      var phoneLanguage = getLang();
       phoneIti = window.intlTelInput(phoneInput, {
         separateDialCode: true,
-        initialCountry: getInitialCountry(getLang()),
+        initialCountry: getInitialCountry(phoneLanguage),
+        i18n: getPhoneCountryTexts(phoneLanguage),
         formatAsYouType: false,
         validationNumberType: null,
         preferredCountries: ['al', 'it', 'ch', 'de', 'gb', 'us', 'fr', 'es']
